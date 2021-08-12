@@ -167,3 +167,32 @@ def mult(M: NumMatTypes, v: NumArrTypes):
 
     # Return the sum.
     return [sum(M[i][j] * v[j] for j in range(n)) for i in range(n)]
+
+
+def freivalds(A: NumMatTypes, B: NumMatTypes, C: NumMatTypes) -> bool:
+    """
+    Performs *Freivalds test* (1979). Checks that the the equality :math:`AB = C` holds for :math:`n*n`
+    matrices :math:`A, B, C` .
+    For more information see the `Freivalds' Algorithm <https://en.wikipedia.org/wiki/Freivalds%27_algorithm>`_
+    wikipedia article.
+
+    :param NumMatTypes A: :math:`n*n` input matrix.
+    :param NumMatTypes B: :math:`n*n` input matrix.
+    :param NumMatTypes C: :math:`n*n` to check the :math:`A*B` product against.
+    :rtype: bool
+    :return: Whether the product is correct.
+    """
+    n: int = len(A)
+    x = [randint(0, 1000000) for j in range(n)]
+    return mult(A, mult(B, x)) == mult(C, x)
+
+
+def main() -> None:
+    """
+    A simple test harness for *Freivalds' test**.
+    """
+    n: int = readint()
+    A: list[list[int]] = readmatrix(n)
+    B: list[list[int]] = readmatrix(n)
+    C: list[list[int]] = readmatrix(n)
+    print(freivalds(A, B, C))
