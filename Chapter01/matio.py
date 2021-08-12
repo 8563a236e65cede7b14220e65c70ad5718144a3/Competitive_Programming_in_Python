@@ -9,7 +9,7 @@ whether the equality :math:`AB = C` holds for :math:`n*n` matrices :math:`A, B, 
 import os
 import sys
 import logging
-from typing import Type, Any, AnyStr
+from typing import TypeVar, Any, Union, Type, Optional
 from random import randint
 from pathlib import Path
 
@@ -21,6 +21,8 @@ logging.basicConfig(
 
 # Get the logger
 logger = logging.getLogger("Chapter01.matio")
+
+NumArrTypes = TypeVar("NumArrTypes", list[int], list[float])
 
 
 def flush_buffers_and_exit(error: int) -> None:
@@ -37,16 +39,22 @@ def flush_buffers_and_exit(error: int) -> None:
     sys.exit(error)
 
 
-def convert_anystr(any_str: AnyStr) -> str:
+def convert_anystr(any_str: Union[str, bytes]) -> str:
     """
-    Helper function to take an :class:`.AnyStr` type and return :class:`str` output. Returns :class:`str` input
+    Helper function to take an :class:`.Union[str, bytes]` type and return :class:`str` output. Returns :class:`str` input
     unmodified but decodes :class:`bytes` input to :class:`str`.
 
-    :param typing.AnyStr any_str: The :class:`str` or :class:`bytes` object to coerce.
+    :param typing.Union[str, bytes] any_str: The :class:`str` or :class:`bytes` object to coerce.
     :rtype: str
     :return: :class:`str` value of any_str.
     """
-    return any_str if isinstance(any_str, str) else any_str.decode()
+    return_value: Union[str, bytes]
+    if isinstance(any_str, str):
+        return_value = any_str
+    elif isinstance(any_str, bytes):
+        return_value = any_str.decode()
+
+    return return_value
 
 
 def readint() -> int:
@@ -61,7 +69,7 @@ def readint() -> int:
     value: int = 0
 
     # Read the line first.
-    stdin_input_str: AnyStr = sys.stdin.readline()
+    stdin_input_str: Union[str, bytes] = sys.stdin.readline()
 
     # The function is expecting a single integer input. We must handle the case where the input is a single integer.
     try:
@@ -78,28 +86,38 @@ def readint() -> int:
     return value
 
 
-def readarray(typ: Type) -> list[Any]:
+def readarray(typ: str) -> list[Any]:
     """
     Reads in an array of a given type from :code:`stdin`. If the elements within :code:`stdin` are not all of the
     correct type, the program exits.
 
-    :param typing.Type typ: The type of the elements of the list.
+    :param str typ: The type of the elements of the list.
     :rtype: list[Any]
     :return: A list created from the :code:`stdin` input line.
     """
     # Initialize storage.
-    array: list[typ]
+    if typ == "int" or typ == "float" or typ == "str":
+        array: Union[list[int], list[float], list[str]]
+    else:
+        logger.critical("readarray - Unsupported Type\nInput " + str(typ))
+        flush_buffers_and_exit(os.EX_DATAERR)
 
     # Read the line.
-    stdin_input_str: AnyStr = sys.stdin.readline()
+    stdin_input_str: Union[str, bytes] = sys.stdin.readline()
 
     # We attempt to map the input to a list of appropriate type.
     try:
         # All the entries in the input line were of the correct type.
-        array = list(map(typ, stdin_input_str.split()))
+        if typ == "int":
+            array = list(map(int, stdin_input_str.split()))
+        elif typ == "float":
+            array = list(map(float, stdin_input_str.split()))
+        if typ == "str":
+            array = list(map(str, stdin_input_str.split()))
+
     except ValueError as err:
         # At least one of the entries in the input line was of an incorrect type. We log the error message and exit
-        # with an os.EX_DATAERR
+        # with an os.EX_DATAERR.
         logger.critical(
             "readarray - " + str(err) +
             "\nInput: " + convert_anystr(stdin_input_str)
@@ -109,11 +127,43 @@ def readarray(typ: Type) -> list[Any]:
     return array
 
 
-if __name__ == "__main__":
-    #return_value = readint()
-    #print("Returned: " + str(return_value))
+def readmatrix(n: int) -> list[list[int]]:
+    """
+    Reads an :math:`n*n` matrix from stdin. The input is expected to consist solely of integers.
 
-    arr = readarray(int)
-    print(arr)
+    :param int n: The dimension of the square matrix.
+    :rtype: list[list[int]]
+    :return: A list of lists of integers representing the matrix.
+    """
+    # Create the list to store the results.
+    M: list = []
 
+    # For each line of input from stdin.
+    for lines in range(n):
+        # Read in the values as an array.
+        row: list[int] = readarray("int")
+
+        # Check that the length of the row is equal to n.
+        assert len(row) == n
+
+        # Append the row to storage.
+        M.append(row)
+
+    return M
+
+
+def mult(M: list[NumArrTypes], v: NumArrTypes):
+    """
+    Performs the calculations :math:`M*v` where :math:`M` is an :math:`n*n` matrix, and :math:`v` is a vector of length
+    :math:`n` . The function operates on integers or floating point values.
+
+    :param M: :math:`n*n` matrix
+    :param v: vector of length :math:`n`
+    :return: A vector of length :math:`n` that represents :math:`M*v`
+    """
+    # Get the number of rows in the matrix.
+    n: int = len(M)
+
+    # Return the sum.
+    return [sum(M[i][j] * v[j] for j in range(n)) for i in range(n)]
 
