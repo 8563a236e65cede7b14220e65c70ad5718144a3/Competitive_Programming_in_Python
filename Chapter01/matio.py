@@ -20,7 +20,7 @@ logging.basicConfig(
 )
 
 # Get the logger
-logger = logging.getLogger("Chapter01.matrix_input_output")
+logger = logging.getLogger("Chapter01.matio")
 
 
 def flush_buffers_and_exit(error: int) -> None:

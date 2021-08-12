@@ -4,10 +4,10 @@ Chapter01 package
 Submodules
 ----------
 
-Chapter01.matrix\_input\_output module
+Chapter01.matio module
 --------------------------------------
 
-.. automodule:: Chapter01.matrix_input_output
+.. automodule:: Chapter01.matio
    :members:
    :undoc-members:
    :show-inheritance:
