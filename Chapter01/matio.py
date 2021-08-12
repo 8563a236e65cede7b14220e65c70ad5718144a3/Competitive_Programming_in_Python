@@ -21,10 +21,13 @@ logging.basicConfig(
 
 # Get the logger
 logger = logging.getLogger("Chapter01.matio")
+"""Logger for this module."""
 
 NumArrTypes = TypeVar("NumArrTypes", list[int], list[float])
-NumMatTypes = TypeVar("NumMatTypes", list[list[int]], list[list[float]])
+"""Generic variable for numeric arrays."""
 
+NumMatTypes = TypeVar("NumMatTypes", list[list[int]], list[list[float]])
+"""Generic variable for numeric matrices."""
 
 def flush_buffers_and_exit(error: int) -> None:
     """
@@ -157,7 +160,7 @@ def mult(M: NumMatTypes, v: NumArrTypes):
     """
     Performs the calculations :math:`M*v` where :math:`M` is an :math:`n*n` matrix, and :math:`v` is a vector of length
     :math:`n` . The function operates on integers or floating point values. The formula applied is
-    :math:`\sum\limits_{j=1}^{n} M_{ij}v_{j}`
+    :math:`\sum\limits_{j=1}^{n} M_{ij}v_{j}` for each row in :math:`M` and returns a list with these values.
 
     :param M: :math:`n*n` matrix
     :param v: vector of length :math:`n`
@@ -175,7 +178,11 @@ def freivalds(A: NumMatTypes, B: NumMatTypes, C: NumMatTypes) -> bool:
     Performs *Freivalds test* (1979). Checks that the the equality :math:`AB = C` holds for :math:`n*n`
     matrices :math:`A, B, C` .
     For more information see the `Freivalds' Algorithm <https://en.wikipedia.org/wiki/Freivalds%27_algorithm>`_
-    wikipedia article.
+    wikipedia article. This performs the sums
+    :math:`\sum\limits_{k=1}^{n} A_{ik} (\sum\limits_{j=1}^{n} B_{ij}x_{j})` and
+    :math:`\sum\limits_{j=1}^{n} C_{ij}x_{j}`
+    for each row in the matrices and where :math:`x` is a random vector. The lists of results are then compared for
+    equality.
 
     :param NumMatTypes A: :math:`n*n` input matrix.
     :param NumMatTypes B: :math:`n*n` input matrix.
@@ -190,7 +197,7 @@ def freivalds(A: NumMatTypes, B: NumMatTypes, C: NumMatTypes) -> bool:
 
 def main() -> None:
     """
-    A simple test harness for *Freivalds' test**.
+    A simple test harness for *Freivalds' test*.
     """
     n: int = readint()
     A: list[list[int]] = readmatrix(n)
