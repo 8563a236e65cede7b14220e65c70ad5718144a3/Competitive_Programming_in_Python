@@ -23,6 +23,7 @@ logging.basicConfig(
 logger = logging.getLogger("Chapter01.matio")
 
 NumArrTypes = TypeVar("NumArrTypes", list[int], list[float])
+NumMatTypes = TypeVar("NumMatTypes", list[list[int]], list[list[float]])
 
 
 def flush_buffers_and_exit(error: int) -> None:
@@ -152,7 +153,7 @@ def readmatrix(n: int) -> list[list[int]]:
     return M
 
 
-def mult(M: list[NumArrTypes], v: NumArrTypes):
+def mult(M: NumMatTypes, v: NumArrTypes):
     """
     Performs the calculations :math:`M*v` where :math:`M` is an :math:`n*n` matrix, and :math:`v` is a vector of length
     :math:`n` . The function operates on integers or floating point values.
@@ -166,4 +167,3 @@ def mult(M: list[NumArrTypes], v: NumArrTypes):
 
     # Return the sum.
     return [sum(M[i][j] * v[j] for j in range(n)) for i in range(n)]
-
