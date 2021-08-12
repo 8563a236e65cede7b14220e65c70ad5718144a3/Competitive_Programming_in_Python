@@ -156,7 +156,8 @@ def readmatrix(n: int) -> list[list[int]]:
 def mult(M: NumMatTypes, v: NumArrTypes):
     """
     Performs the calculations :math:`M*v` where :math:`M` is an :math:`n*n` matrix, and :math:`v` is a vector of length
-    :math:`n` . The function operates on integers or floating point values.
+    :math:`n` . The function operates on integers or floating point values. The formula applied is
+    :math:`\sum\limits_{j=1}^{n} M_{ij}v_{j}`
 
     :param M: :math:`n*n` matrix
     :param v: vector of length :math:`n`
