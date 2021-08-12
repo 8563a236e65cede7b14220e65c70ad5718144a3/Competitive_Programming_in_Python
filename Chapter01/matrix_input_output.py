@@ -23,12 +23,18 @@ logging.basicConfig(
 logger = logging.getLogger("Chapter01.matrix_input_output")
 
 
-def flush_buffers() -> None:
+def flush_buffers_and_exit(error: int) -> None:
     """
-    A convenience function to flush stdout and stderr buffers. Useful for when exiting with sys.exit.
+    A convenience function to flush stdout and stderr buffers and exit the program with a given OS return value.
+
+    :param int error: An OS return value from :mod:`os`.
     """
+    # Flush the buffers.
     sys.stdout.flush()
     sys.stderr.flush()
+
+    # Exit
+    sys.exit(error)
 
 
 def readint() -> int:
@@ -47,21 +53,27 @@ def readint() -> int:
         value = int(sys.stdin.readline())
     except ValueError as err:
         # The input was not a recognizable integer. Log the error and exit the program.
-        logger.critical("readint " + str(err))
-        flush_buffers()
-        sys.exit(os.EX_DATAERR)
+        logger.critical("readint - " + str(err))
+        flush_buffers_and_exit(os.EX_DATAERR)
 
     return value
 
 
 def readarray(typ: Type):
     array: list[typ]
-    array = list(map(typ, sys.stdin.readline().split()))
+    try:
+        array = list(map(typ, sys.stdin.readline().split()))
+    except ValueError as err:
+        logger.critical("readarray - " + str(err))
+        flush_buffers_and_exit(os.EX_DATAERR)
     return array
 
 
 if __name__ == "__main__":
     #return_value = readint()
     #print("Returned: " + str(return_value))
+
+    arr = readarray(int)
+    print(arr)
 
 
