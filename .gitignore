@@ -1,1 +1,8 @@
+# Sphinx Build Folder
+docs/build
+
+# PyCharm project folder
 .idea
+
+# Compiled Python
+**/**/__pycache__
