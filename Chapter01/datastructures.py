@@ -224,3 +224,58 @@ class OurHeap:
         else:
             # Move the element up.
             self.up(i)
+
+class UnionFind:
+    """
+    Implementation of Union Find data structure which supports :code:`find` and :code:`union` methods.
+
+    .. automethod:: __init__
+    """
+    def __init__(self, n: int):
+        """
+        Initialization function for UnionFind. Initializes the up_bound and rank arrays used for Union Find's methods.
+
+        :param int n:
+        """
+        # [0, 1, ..., n]
+        self.up_bound: list[int] = list(range(n))
+
+        # [0, 0, ... 0] (n elements)
+        self.rank: list[int] = [0] * n
+
+    def find(self, x_index: int) -> int:
+        """
+        Recursively find the up_bound at index x_index.
+
+        :param int x_index: The index of the element.
+        :return:
+        """
+        if self.up_bound[x_index] == x_index:
+            return x_index
+        self.up_bound[x_index] = self.find(self.up_bound[x_index])
+        return self.up_bound[x_index]
+
+    def union(self, x_index: int, y_index: int) -> bool:
+        """
+        Perform the Union Find union operation.
+
+        :param int x_index:
+        :param int y_index:
+        :return:
+        """
+        # Find the up_bound at the x_index
+        repr_x: int = self.find(x_index)
+
+        # Find the up_bound at the x_index
+        repr_y: int = self.find(y_index)
+        if repr_x == repr_y:
+            return False
+        if self.rank[repr_x] == self.rank[repr_y]:
+            self.rank[repr_x] += 1
+            self.up_bound[repr_y] = repr_x
+        elif self.rank[repr_x] > self.rank[repr_y]:
+            self.up_bound[repr_y] = repr_x
+        else:
+            self.up_bound[repr_x] = repr_y
+
+        return True
