@@ -11,6 +11,7 @@ Welcome to Competitive Programming in Python's documentation!
    :caption: Contents:
 
    Chapter01
+   Chapter02
 
 
 
