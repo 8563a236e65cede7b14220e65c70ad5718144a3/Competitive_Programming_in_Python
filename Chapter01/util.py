@@ -84,14 +84,14 @@ def max_interval_intersec(S: list[tuple[NumT, NumT]]):
     """
     # Construct left and right intervals.
     B: list[tuple[NumT, int]] = ([(left, +1) for left, right in S] +
-         [(right, -1) for left, right in S])
+                                 [(right, -1) for left, right in S])
 
     # Sort intervals.
     B.sort()
 
     # Declare a counter, two iterators and storage for the result.
-    c: int = 0
-    x: NumT
+    c: int = 0                  # Keeps track of intervals beginnings that have been seen
+    x: NumT                     # Pointer
     d: int
     best: tuple[int, NumT]
 
