@@ -103,3 +103,20 @@ def max_interval_intersec(S: list[tuple[NumT, NumT]]):
             best = (c, x)
 
     return best
+
+
+def min_scalar_prod(x: list[NumT], y: list[NumT]):
+    """
+    Produces the minimum scalar product between two lists of numbers. Given two vectors :math:`x` and :math:`y` of
+    :math:`n` non-negative integers, this yields the permutation :math:`\pi` of :math:`\{1,...,n\}` such that
+    :math:`\sum\limits_{i}^{n} x_{i}y_{\pi(i)}` is minimal.
+
+    :param list[NumT] x: First list.
+    :param list[NumT] y: Second list.
+    :return: Minimum scalar product
+    """
+    # Return sorted copies of the inputs.
+    x1: list[NumT] = sorted(x)
+    y1: list[NumT] = sorted(y)
+    return sum(x1[i] * y1[-i - 1] for i in range(len(x1)))
+
