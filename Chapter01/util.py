@@ -50,3 +50,24 @@ def majority(L: list[str]) -> str:
     val_1st_max, arg_1st_max = min((-count[word], word) for word in count)
 
     return arg_1st_max
+
+
+def closest_values(L: list[NumT]) -> tuple[NumT, NumT]:
+    """
+    Find the two values in a list with the closest values.
+
+    :param list[NumT] L:
+    :rtype: tuple[NumT, NumT]
+    :return: The two values with the minimal difference.
+    """
+    # If there are less than two items we cannot do the comparison.
+    assert len(L) >= 2
+
+    # Sort the list.
+    L.sort()
+
+    # Get the smallest difference and the index of the minimum difference.
+    valmin, argmin = min((L[i] - L[i-1], i) for i in range(1, len(L)))
+
+    # Returns the two numbers that produced the minimum difference.
+    return L[argmin-1], L[argmin]
