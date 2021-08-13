@@ -14,6 +14,9 @@ class OurQueue:
     This is a concrete class for the Queue abstract data type. It implements the push, pop and len methods required for
     this data structure.
 
+    :ivar list[Any] in_stack: A list that takes Any element where input values are stored.
+    :ivar list[Any] out_stack: The list from which elements are consumed.
+
     .. automethod:: __init__
     .. automethod:: __len__
     """
@@ -65,6 +68,9 @@ class OurHeap:
 
     It represents a quasi-perfect binary tree and allows the extraction of the smallest element and insertion of a new
     element at logarithmic cost.
+
+    :ivar list[Any] heap: A list that accepts Any type to function as the heap.
+    :ivar dict[Any, int] rank: A dictionary that keeps track of the location of the elements.
 
     .. automethod:: __init__
     .. automethod:: __len__
@@ -229,13 +235,16 @@ class UnionFind:
     """
     Implementation of Union Find data structure which supports :code:`find` and :code:`union` methods.
 
+    :ivar list[int] up_bound: (to be filled in)
+    :ivar list[int] rank: (to be filled in)
+
     .. automethod:: __init__
     """
     def __init__(self, n: int):
         """
         Initialization function for UnionFind. Initializes the up_bound and rank arrays used for Union Find's methods.
 
-        :param int n:
+        :param int n: (to be filled in)
         """
         # [0, 1, ..., n]
         self.up_bound: list[int] = list(range(n))
@@ -248,7 +257,7 @@ class UnionFind:
         Recursively find the up_bound at index x_index.
 
         :param int x_index: The index of the element.
-        :return:
+        :return: (to be filled in)
         """
         if self.up_bound[x_index] == x_index:
             return x_index
@@ -259,9 +268,9 @@ class UnionFind:
         """
         Perform the Union Find union operation.
 
-        :param int x_index:
-        :param int y_index:
-        :return:
+        :param int x_index: (to be filled in)
+        :param int y_index: (to be filled in)
+        :return: (to be filled in)
         """
         # Find the up_bound at the x_index
         repr_x: int = self.find(x_index)
