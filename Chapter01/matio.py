@@ -191,7 +191,7 @@ def freivalds(A: NumMatTypes, B: NumMatTypes, C: NumMatTypes) -> bool:
     :return: Whether the product is correct.
     """
     n: int = len(A)
-    x = [randint(0, 1000000) for j in range(n)]
+    x: list[int] = [randint(0, 1000000) for j in range(n)]
     return mult(A, mult(B, x)) == mult(C, x)
 
 
