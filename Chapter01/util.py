@@ -152,6 +152,9 @@ def fibo_dp(n: int) -> int:
     # Create a list with F(0) and F(1)
     mem: list[int] = [0, 1]
 
+    # Declare iterator
+    i: int
+
     # Iterate up to n
     for i in range(2, n + 1):
         # Use the formula F(i) = F(i-1) + F(i-2) to calculate the latest element.
