@@ -71,3 +71,35 @@ def closest_values(L: list[NumT]) -> tuple[NumT, NumT]:
 
     # Returns the two numbers that produced the minimum difference.
     return L[argmin-1], L[argmin]
+
+
+def max_interval_intersec(S: list[tuple[NumT, NumT]]):
+    """
+    Given :math:`n` intervals :math:`[l_{i}, r_{i})` for :math:`i = 0,...,n-1` we wish to find a value :math:`x`
+    included in a maximum number of intervals. This implementation is in time :math:`O(n\log n)` .
+
+    :param list[tuple[NumT, NumT]] S: n sets of intervals.
+    :rtype: tuple[NumT, NumT]
+    :return: The maximum interval intersection.
+    """
+    # Construct left and right intervals.
+    B: list[tuple[NumT, int]] = ([(left, +1) for left, right in S] +
+         [(right, -1) for left, right in S])
+
+    # Sort intervals.
+    B.sort()
+
+    # Declare a counter, two iterators and storage for the result.
+    c: int = 0
+    x: NumT
+    d: int
+    best: tuple[int, NumT]
+
+    # For interval, side
+    for x, d in B:
+        c += d
+        # Keep track of the best interval
+        if best[0] < c:
+            best = (c, x)
+
+    return best
