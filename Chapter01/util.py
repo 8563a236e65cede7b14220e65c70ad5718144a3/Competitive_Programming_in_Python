@@ -5,7 +5,7 @@ Utility Functions
 This module contains miscellaneous utility functions and examples from the textbook.
 """
 from collections import Iterable
-from typing import Any, TypeVar
+from typing import Any, TypeVar, Optional
 
 NumT = TypeVar("NumT", int, float)
 
@@ -162,3 +162,32 @@ def fibo_dp(n: int) -> int:
 
     # Return the last element which is the nth Fibonacci number.
     return mem[-1]
+
+
+def three_partition(x: list[int]) -> Optional[tuple[int, int, int]]:
+    """
+    Given :math:`n` integers :math:`x_{0},...x_{n-1}`, we wish to partition them into three sets with the same sum.
+
+    :param x: A list of :math:`n` integers
+    :return:
+    """
+    # Create a list with n 0 entries.
+    f = [0] * (1 << len(x))
+
+    # Declare iterators
+    i: int
+    v: int
+    S: int
+    A: int
+    B: int
+
+    # For each index, value in x
+    for i, v in enumerate(x):
+        for S in range(1 << i):
+            f[S | (1 << i)] = f[S] + x[i]
+    for A in range(1 << len(x)):
+        for B in range(1 << len(x)):
+            # Check f(A) a f(B) and 3f(A) = f({0,...,n-1})
+            if A & B == 0 and f[A] == f[B] and 3 * f[A] == f[-1]:
+                return A, B, ((1 << len(x)) - 1) ^ A ^ B
+    return None
