@@ -6,3 +6,5 @@ docs/build
 
 # Compiled Python
 **/**/__pycache__
+**/**/.mypy_cache
+
