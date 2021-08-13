@@ -5,6 +5,7 @@ Utility Functions
 This module contains miscellaneous utility functions and examples from the textbook.
 """
 from collections import Iterable
+from collections.abc import Callable
 from typing import Any, TypeVar, Optional
 
 NumT = TypeVar("NumT", int, float)
@@ -191,3 +192,69 @@ def three_partition(x: list[int]) -> Optional[tuple[int, int, int]]:
             if A & B == 0 and f[A] == f[B] and 3 * f[A] == f[-1]:
                 return A, B, ((1 << len(x)) - 1) ^ A ^ B
     return None
+
+
+def discrete_binary_search(tab: list[bool], lo: int, hi: int) -> int:
+    """
+    Discrete binary search that only operates on a sorted boolean array.
+
+    :param list[bool] tab: A boolean array in which we want to find the first True value.
+    :param lo: The lower index to search.
+    :param hi: The upper index to search.
+    :rtype: int
+    :return: The index of the first True value.
+    """
+    # Bisect the search area at each iteration
+    while lo < hi:
+        mid = lo + (hi - lo) // 2
+        # If the value is True, adjust the upper bound
+        if tab[mid]:
+            hi = mid
+        # Otherwise, the value was false and we adjust the lower bound
+        else:
+            low = mid + 1
+
+    return lo
+
+
+def continous_binary_search(f: Callable[[float], bool], lo: float, hi: float, gap:float =1e-4):
+    """
+    This technique can be applied when the domain of :math:`f` is continuous and we seek the smallest :math:`x_{0}`
+    such that :math:`f(x_{0}) = 1` for every :math:`x\geq x_{0}` . :math:`f` should only output non-decreasing boolean
+    values along its domain.
+
+    :param Callable[[float], bool] f:
+    :param float lo: The lower bound of the continuous range to search.
+    :param float hi: The upper bound of the continous range to search.
+    :param float gap: The desired level of precision.
+    :rtype: float
+    :return: The smallest :math:`x_{0}` s.t. :math:`f(x_{0}) = 1`
+    """
+
+    # Continue until we reach our desired precision.
+    while hi - lo > gap:
+        mid = (lo + hi) / 2.0
+        if f(mid):
+            hi = mid
+        else:
+            lo = mid
+
+    return lo
+
+
+def optimized_binary_search(tab: list[bool], logsize: int) -> int:
+    """
+    An optimized binary search if the search space of size n is a power of 2. Uses the dark arts of bit manipulation to
+    get the job done in an obscure way.
+
+    :param list[bool] tab: A sorted boolean array to search.
+    :param int logsize: The size of the search space.
+    :return: The index of the value.
+    """
+    hi: int = (1 << logsize) - 1
+    intervalsize: int = (1 << logsize) >> 1
+    while intervalsize > 0:
+        if tab[hi ^ intervalsize]:
+            hi ^= intervalsize
+        intervalsize >>= 1
+    return hi
