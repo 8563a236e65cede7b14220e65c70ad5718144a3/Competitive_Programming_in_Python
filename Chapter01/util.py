@@ -73,7 +73,7 @@ def closest_values(L: list[NumT]) -> tuple[NumT, NumT]:
     return L[argmin-1], L[argmin]
 
 
-def max_interval_intersec(S: list[tuple[NumT, NumT]]):
+def max_interval_intersec(S: list[tuple[NumT, NumT]]) -> tuple[int, NumT]:
     """
     Given :math:`n` intervals :math:`[l_{i}, r_{i})` for :math:`i = 0,...,n-1` we wish to find a value :math:`x`
     included in a maximum number of intervals. This implementation is in time :math:`O(n\log n)` .
@@ -105,7 +105,7 @@ def max_interval_intersec(S: list[tuple[NumT, NumT]]):
     return best
 
 
-def min_scalar_prod(x: list[NumT], y: list[NumT]):
+def min_scalar_prod(x: list[NumT], y: list[NumT]) -> NumT:
     """
     Produces the minimum scalar product between two lists of numbers. Given two vectors :math:`x` and :math:`y` of
     :math:`n` non-negative integers, this yields the permutation :math:`\pi` of :math:`\{1,...,n\}` such that
@@ -120,3 +120,42 @@ def min_scalar_prod(x: list[NumT], y: list[NumT]):
     y1: list[NumT] = sorted(y)
     return sum(x1[i] * y1[-i - 1] for i in range(len(x1)))
 
+
+def fibo_naive(n: int) -> int:
+    """
+    A naive implementation of the Fibonacci sequence to illustrate inefficient programming.
+
+    :param int n: The index of the Fibonacci number to calculate
+    :return: The Fibonacci number at index n.
+    """
+    # Clause to terminate if n is less than 2.
+    if n <= 1:
+        return n
+    return fibo_naive(n - 1) + fibo_naive(n - 2)
+
+
+def fibo_dp(n: int) -> int:
+    r"""
+    An efficient dynamic programming approach to generating Fibonacci numbers. Calculates Fibonacci numbers forwards,
+    storing the results in an array until reaching the desired number. Thus removes a great many nodes from the
+    dependency graph. Computes
+
+    .. math::
+
+        F(0) &= 0                \\
+        F(1) &= 1                \\
+        F(i) &= F(i-1) + F(i-2)
+
+    :param int n: The index of the Fibonacci number to calculate
+    :return: The Fibonacci number at index n.
+    """
+    # Create a list with F(0) and F(1)
+    mem: list[int] = [0, 1]
+
+    # Iterate up to n
+    for i in range(2, n + 1):
+        # Use the formula F(i) = F(i-1) + F(i-2) to calculate the latest element.
+        mem.append(mem[-2] + mem[-1])
+
+    # Return the last element which is the nth Fibonacci number.
+    return mem[-1]
